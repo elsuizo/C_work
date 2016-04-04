@@ -44,7 +44,7 @@ int f(int **iptr)
 }
     
 ```
-O sea que le estamos dando la direccion de memoria de una variable que va a desaparecer!!!
+O sea que le estamos dando la dirección de memoria de una variable que va a desaparecer!!!
 
 # Agrupamiento de datos en `C`
 
@@ -52,20 +52,62 @@ Uno de los usos mas frecuentes de los punteros en `C` es el de referenciar datos
 `C` soporta dos tipos de agrupamiento: *structs* y *arrays*. Como sabemos las 
 *structs* son agrupamientos de datos heterogéneos que pueden ser tratados juntos 
 como un solo tipo de dato. Los punteros a *structs* son una parte importante para
-construir los tipos de datos mas conocidos.
+construir los tipos de datos mas conocidos. Como ejemplo podemos hablar de las 
+listas enlazadas(*linking lists*), la estructura de dichas listas es por cada 
+elemento de la lista tenemos una *struct* `ListElmt`
+```C
+typedef struct ListElmt_
+{
+    void *data;
+    struct ListElmt_ *next;
+}ListElmt;
+```
+La cual posee un puntero `*data` que apunta a la dirección de los datos y un 
+puntero a la proxima *struct* `*next` el cual apunta a la proxima lista de datos
+, si es la ultima apuntara a `NULL`. Un aspecto importante de las *struct* es 
+que no pueden contener instancias de si misma, pero si punteros a instancias de 
+si misma como es el caso de `ListElmt`
 
-## Arrays
-Los *arrays* son secuencia de elementos homogeneos distribuidos consecutivemente
-en memoria. Como sabemos en `C` los *arrays* estan muy ligados a los punteros ya
-que cuando una expresion de *array* ocurre el lenguage automaticamente convierte 
+
+## *Arrays*
+Los *arrays* son secuencia de elementos homogéneos distribuidos consecutivamente
+en memoria. Como sabemos en `C` los *arrays* están muy ligados a los punteros ya
+que cuando una expresión de *array* ocurre el lenguaje automáticamente convierte 
 a este en un puntero que apunta al primer elemento del *array*. O sea que existe
-una relacion entre: `a[i]`  y `*(a + i)`  que tambien vale para matrices`*(*(a + i) + j)`
+una relación entre: `a[i]`  y `*(a + i)`  que también vale para matrices`*(*(a + i) + j)`
+Podemos pasar *arrays* multidimensionales pero debemos indicarle al compilador
+el numero de elementos que hay en la primer dimensión, por ejemplo para una matriz
+de $2\times 3$ 
+```C
+int g(int a[][2])
+{
+    a[2][0] = 5;
+    return 0;
+}
 
-## Punteros como parametro de funciones
+```
+## Punteros como parámetro de funciones
 
-Los punteros son utilizados para pasar a las funciones parametros por referencia
-en lugar de por valor(ya que si por ejemplo tenemos un array grande este primero
+Los punteros son utilizados para pasar a las funciones parámetros por referencia
+en lugar de por valor(ya que si por ejemplo tenemos un *array* grande este primero
 se copia y luego se pasa a la función). 
 
+## Punteros a punteros como parámetro de funciones
 
+Una situación en la que una función debe modificar un puntero que le es pasado
+como parámetro, es propicia para utilizar un puntero que apunte a ese puntero 
+para asi poder modificarlo. Por ejemplo en la siguiente función:
+`int list_rem_next(List *list, ListElmt *element, void **data);`
+ya que la operacion debe modificar el puntero `*data` para hacer que apunte hacia
+los datos removidos. A veces no es importante el *type* del puntero, por ello 
+podemos definir punteros genéricos. 
+
+
+## Punteros genericos
+
+En `C` solo podemos hacer asignaciones de punteros del mismo *type*, por ejemplo
+si tenemos un puntero de `char` `sptr` y queremos asignarlo a un puntero de `int`
+`iptr` no podremos. Sin embargo los punteros genéricos(`gptr`) pueden ser asignados a 
+cualquier *type*. Para realizar un puntero genérico solo debemos declararlo como
+`void`
 
