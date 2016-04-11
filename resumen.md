@@ -156,4 +156,9 @@ sea:
 ```c 
 retval = match(&x, &y);
 ```
+## Recursividad
+
+La recursividad la podemos encontrar en todas partes, la naturaleza esta llena
+de ejemplos(las hojas de un arbol por ejemplo). En el contexto de computación la 
+recursividad se puede lograr con funciones que se llaman a si mismas.
 
