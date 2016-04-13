@@ -28,7 +28,7 @@ You should have received a copy of the GNU General Public License
 //-------------------------------------------------------------------------
 //      fact_tail() 
 //-------------------------------------------------------------------------
-int fact_tail(int n, int a)
+unsigned int fact_tail(unsigned int n, unsigned int a)
 {
     //-------------------------------------------------------------------------
     //      Compute the factorial of n in a tail-recursive manner
@@ -44,14 +44,14 @@ int fact_tail(int n, int a)
 
 }
 
-int main()
+unsigned int main()
 {
-    int N = 4;
-    int a = 1;
-    int result = 0;
+    unsigned int N = 100;
+    unsigned int a = 1;
+    unsigned int result = 0;
     result = fact_tail(N, a);
-    // NOTE(put the fucking \n in printf)
-    printf("the factorial of: %d is %d\n", N, result);
+    // NOTE(put the fucking \n in prunsigned intf)
+    printf("the factorial of: %u is %u\n", N, result);
 
     return 0;
 }

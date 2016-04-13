@@ -6,7 +6,7 @@
 @email martin.noblia@openmailbox.org
 
 @brief
-
+Linked list declaration
 @detail
 
 Licence:
@@ -28,46 +28,49 @@ You should have received a copy of the GNU General Public License
 
 #include<stdlib.h>
 
-/*-------------------------------------------------------------------------
-define a structure for linker list elements
--------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------
+                define a structure for a linked list elements
+------------------------------------------------------------------------------*/
 typedef struct ListElement_
 {
-    void *data;
+    void                *data;
     struct listElement_ *next;
-}listElement;
+}ListElement;
 
-/*-------------------------------------------------------------------------
-  define a structure for linker lists
--------------------------------------------------------------------------*/
-
-typedef struct List_ 
+/*------------------------------------------------------------------------------
+                    define a structure for a linked list
+------------------------------------------------------------------------------*/
+typedef struct List_
 {
     int size;
-    
+
     int (*match)(const void *key1, const void *key2);
     void (*destroy)(void *data);
-    
+
     ListElement *head;
     ListElement *tail;
 
 }List;
 
-/*-------------------------------------------------------------------------
-  public interface
--------------------------------------------------------------------------*/
+/*------------------------------------------------------------------------------
+                            public interface
+------------------------------------------------------------------------------*/
 // initialize the linked list, size=0, the head and tail poiter to NUL
-void list_init(List *list, void (*destroy)(*void data));
+// this opertion must realized before the list can be used
+void list_init(List *list, void (*destroy)(void *data));
 
 // destroy a linked list(removing all elements of the list)
 void list_destroy(List *list);
 
-// insert element just after specified element                     
+// insert element just after specified element
 int list_insert_next(List *list, ListElement *element, const void *data);
 
-// 
+//
 int list_remove_next(List *list, ListElement *element, void **data);
 
+/*------------------------------------------------------------------------------
+                            Macros 
+------------------------------------------------------------------------------*/
 #define list_size(list) ((list) -> size)
 #define list_head(list) ((list) -> head)
 #define list_tail(list) ((list) -> tail)
@@ -76,7 +79,3 @@ int list_remove_next(List *list, ListElement *element, void **data);
 #define list_next(element) ((element) -> next)
 
 #endif
-
-
-
-

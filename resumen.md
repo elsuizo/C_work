@@ -159,6 +159,163 @@ retval = match(&x, &y);
 ## Recursividad
 
 La recursividad la podemos encontrar en todas partes, la naturaleza esta llena
-de ejemplos(las hojas de un arbol por ejemplo). En el contexto de computación la 
+de ejemplos(las hojas de un árbol por ejemplo). En el contexto de computación la 
 recursividad se puede lograr con funciones que se llaman a si mismas.
+
+## Listas enlazadas(*Linked list*)
+
+Las listas enlazadas son una composición de elementos o datos cada uno vinculado 
+por un simple puntero. Cada elemento consiste en dos partes: un data miembro(`data`)
+y un puntero llamado el puntero al proximo dato(`next`). Usando esta estructura de 
+dos miembros la lista enlazada se forma apuntando el puntero `next` de cada elemento 
+a el elemento que le sigue a el(el dato obvio). El puntero `next` del ultimo elemento
+es *seteado* a `NULL`(siempre es bueno tener una referencia). El elemento al comienzo 
+de la lista se conoce como `head`(cabeza) y el elemento al final de la lista se 
+conoce como `tail`(cola). Para acceder a los elementos de la lista se comienza por 
+`head` y se utiliza el puntero `next` de los sucesivos elementos para moverse elemento 
+a elemento hasta que hallamos encontrado el dato requerrido. Con listas enlazadas 
+simples solo podemos recorrerlas en un sentido, ya que no tenemos información(o se pierde)
+de como fue que llegamos a cierto dato(no tenemos información de nuestros predecesor). 
+
+### Interface (`list.h`)
+
+`list_init`
+==========
+
+`void list_init(List *list, void (*destroy)(void *data));`
+
+Return value: NoNe
+
+Descripción: Inicializa la lista enlazada especificada por `list`. Esta operación
+debe realizarse para una lista que todavía no ha sido creada. El argumento `destroy`
+provee una manera de liberar memoria dinámicamente allocada cuando el destructor(`list_destroy`)
+es llamado. `destroy` debe ser *seteado* con *free* para liberar la memoria de la lista enlazada.
+
+Complejidad de computo $O(1)$
+=============================
+
+`list_destroy`
+=============
+
+`void list_destroy(List *list);`
+
+Return value: NoNe
+
+Descripcion: Destruye la lista enlazada especificada por `list`. Despues de su llamado
+ninguna otra operacion es permitida para `list`.
+
+Complejidad: $O(n)$ donde $n$ es el numero de elementos de la lista enlazada 
+
+
+`list_ins_next`
+===============
+
+`int list_ins_next(List *list, ListElmt *element, const void *data)`
+
+Return value: $0$ si la insercion del elemento es exitosa o $-1$ en otro caso.
+
+Descripcion: Inserta un elemento justo despues de `element` en la lista enlazada 
+especificada por `list`. Si el elemento es `NULL`, el nuevo elemento es insertado
+en la cola de la lista. El nuevo elemento contiene un puntero a `data` entonces 
+la memoria referenciada por data entonces la memoria referenciada por `data` debe
+permanecer valida hasta que `element` pertenezca a al lista. Es responsabilidad 
+del que llama a la funcion de mantener la memoria apuntada por `data`
+
+Complejidad: $O(1)$
+
+`list_rem_next`
+==============
+
+`int list_rem_next(List *list, ListElmt *element, void **data)`
+
+
+Return value: $0$ si la operacion fue exitosa, o $-1$ en otro caso.
+
+Descripción: Remueve el elemento justo despues de `element` en la lista enlazada
+`list`. Si `element` es `NULL`, el elemento a la cabeza de la lista es removido
+a su regreso, `data` ya no apunta mas a los datos que guardaba cuando pertenecia 
+a la lista, por ello es responsabilidad del que llama a la funcion manejar ese
+espacio de memoria. 
+
+Complejidad: $O(1)$
+
+`list_size`
+==========
+
+`int list_size(const List *list);`
+
+Return value: Numero de elementos en la lista
+
+Descripción: Macro que evalua el numero de elementos que hay en una lista enlazada
+especificada por `list`
+
+Complejidad: $O(1)$
+
+`list_head`
+==========
+
+`ListElmt *list_head(const List *list);`
+
+Return value: Elemento de la lista que esta en la cabeza de la misma.
+
+Complejidad: $O(1)$
+
+`list_tail`
+==========
+
+`ListElmt list_tail(const List *list);`
+
+Return value: macro que evalua el elemento que esta en la cola de la lista especificada por
+`list`
+
+Complejidad: $O(1)$
+
+`list_is_head`
+==============
+
+`int list_is_head(const ListElmt *element);`
+
+Return value: $1$ si el elemento esta en la cabeza de la lista, $0$ en otro caso.
+
+Descripcion: Macro que determina cuando el elemento especificado por `element` esta
+en la cabeza de la lista enlazada.
+
+Complejidad: $O(1)$
+
+`list_is_tail`
+=============
+
+`int list_is_tail(const ListElmt *element);`
+
+Return value: $1$ si el elemento esta en la cola de la lista enlazada $0$ en otro caso.
+
+Descripción: Macro que determina cuando en elemento especificado por `element` esta en
+la cola de la lista enlazada.
+
+`list_data`
+==========
+
+`void *list_data(const ListElmt *element);`
+
+Return value: Datos guardados en el elemento 
+
+Descripción: Macro que evalua los datos apuntados por `element`
+
+Complejidad: $O(1)$
+
+`list_next`
+===========
+
+`ListElmt *list_next(const ListElmt *element);`
+
+Return value: Macro que evalua a los elementos que estan despues de el elemento 
+especificado por `element`
+
+Complejidad: $O(1)$
+
+
+
+
+
+
 
