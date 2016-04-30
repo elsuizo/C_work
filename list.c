@@ -115,26 +115,27 @@ int list_remove_next(List *list, ListElement *element, void **data)
     if(element == NULL)
     {
         // handle removal from the head of the list
-        *data = list->head->data;
+        *data = list->head->data; // put the data in the head
         old_element = list->head;
         list->head = list->head->next;
 
         if(list_size(list) == 1)
             list->tail = NULL;
-        else
-        {
-            // handle removal from somewhere other than the head
-            if(element->next == NULL)
-                return -1;
+    }     
+    else
+    {
+        // handle removal from somewhere other than the head
+        if(element->next == NULL)
+            return -1;
 
-            *data = element->next->data;
-            old_element = element->next;
-            element->next = element->next->next;
+        *data = element->next->data;
+        old_element = element->next;
+        element->next = element->next->next;
 
-            if(element->next == NULL)
-                list->tail = element;
-        }
+        if(element->next == NULL)
+            list->tail = element;
     }
+
 
     // free the storage allocated by the  abstract datatype
     free(old_element);

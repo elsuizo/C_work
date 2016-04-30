@@ -34,7 +34,7 @@ You should have received a copy of the GNU General Public License
 typedef struct ListElement_
 {
     void                *data;
-    struct listElement_ *next;
+    struct ListElement_ *next;
 }ListElement;
 
 /*------------------------------------------------------------------------------
