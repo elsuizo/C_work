@@ -25,6 +25,9 @@ You should have received a copy of the GNU General Public License
 #ifndef _UTILS_
 #define _UTILS_
 
+/*-------------------------------------------------------------------------
+                        defines
+-------------------------------------------------------------------------*/
 #define printf_dec_format(x) _Generic((x), \
     char: "%c", \
     signed char: "%hhd", \
@@ -47,10 +50,32 @@ You should have received a copy of the GNU General Public License
 #define printnl(x) printf(printf_dec_format(x), x), printf("\n");
 
 
-/* TODO(elsuizo): No se si anda bien esta macro */
 /* number of elements in array */
-#define GET_NUM_ELEMS_ARR(x)  (sizeof(x) / sizeof((x)[0]))
+#define ARRAY_SIZE(x)  (sizeof(x) / sizeof((x)[0]))
 
 #define safeFree(p) safer_free((void**)&(p))
+
+/*-------------------------------------------------------------------------
+                        macros
+-------------------------------------------------------------------------*/
+/* print elements of a array(ints) */
+#define PRINT_ARRAY_INTS(array) \
+for(int i = 0; i < (int)ARRAY_SIZE(array); i++) \
+    printf("%d\n", array[i]);
+
+/* print elements of a array(floats)*/
+#define PRINT_ARRAY_FLOATS(array) \
+for(int i = 0; i < (int)ARRAY_SIZE(array); i++) \
+    printf("%f\n", array[i]);
+
+#define PRINT_ARRAY_CHARS(array) \
+for(int i = 0; i < (int)ARRAY_SIZE(array); i++) \
+    printf("%c\n", array[i]);
+
+/*-------------------------------------------------------------------------
+                        global data types
+-------------------------------------------------------------------------*/
+typedef enum{FALSE, TRUE}bool_t;
+typedef unsigned int uint;
 
 #endif
