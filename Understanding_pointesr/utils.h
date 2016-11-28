@@ -55,6 +55,9 @@ You should have received a copy of the GNU General Public License
 
 #define safeFree(p) safer_free((void**)&(p))
 
+#define  STD_OK         0
+#define  STD_ERR        -1
+#define  STD_NOT_FOUND  -2
 /*-------------------------------------------------------------------------
                         macros
 -------------------------------------------------------------------------*/
