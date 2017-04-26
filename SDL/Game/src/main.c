@@ -35,11 +35,12 @@ void render_screen(SDL_Renderer* renderer, SDL_Texture* screen);
 int main(void)
 {
    SDL_Init(SDL_INIT_VIDEO);
-   SDL_Window* window = SDL_CreateWindow("Hola",
-         SDL_WINDOWPOS_UNDEFINED,
-         SDL_WINDOWPOS_UNDEFINED,
-         SCREEN_WIDTH, SCREEN_HEIGHT,
-         0);
+   SDL_Window* window = SDL_CreateWindow("SDL hello world",
+                                        SDL_WINDOWPOS_UNDEFINED,
+                                        SDL_WINDOWPOS_UNDEFINED,
+                                        SCREEN_WIDTH, SCREEN_HEIGHT,
+                                        0);
+
    SDL_Renderer* renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_SOFTWARE);
    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 

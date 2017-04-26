@@ -1,3 +1,3 @@
 #!/bin/bash
-gcc -o $1.out -std=gnu99 "./$1.c" && ./$1
+gcc -o $1 -std=c11 "./$1.c" && ./$1
 #clang-3.8 -o $1 -std=c11 "./$1.c" && ./$1 # con esto tampoco compila

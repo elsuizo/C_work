@@ -57,6 +57,9 @@ Person* return_Person(Person* person);
 /* */
 void deallocate_Person(Person* person);
 void display_Person(Person* person);
+/*-------------------------------------------------------------------------
+ *                        main
+ -------------------------------------------------------------------------*/
 int main(void)
 {
    initilize_list();
