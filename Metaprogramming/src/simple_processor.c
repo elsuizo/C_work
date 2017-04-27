@@ -92,8 +92,12 @@ get_Token(struct Tokeneizer* tokeneizer);
 
 int main(void)
 {
-   char* file_path_and_name = "/home/elsuizo/C_utils/Lists/inc/lists.h";
-   char* file_content = read_entire_file_null_terminate(file_path_and_name);
+   char* file_name = "/home/elsuizo/C_utils/Lists/inc/lists.h";
+   char* file_content = read_entire_file_null_terminate(file_name);
+   if (file_content == 0) {
+      printf("could not open: %s\n", file_name);
+      return(1);
+   }
    struct Tokeneizer tokeneizer = {};
    /* like a iterator??? */
    tokeneizer.at = file_content;
@@ -103,22 +107,22 @@ int main(void)
       struct Token token = get_Token(&tokeneizer);
 
       switch(token.type) {
-         case Token_unknown:
-            {
-
-            }break;
          case Token_end_of_string:
             {
                parsing = false;
             }break;
+         case Token_unknown:
+            {
+            }break;
          default:
             {
                /* .*s cpp crazy town */
-               /* printf("%d: %s", token.type, token.text_length, token.text); */
+               printf("%d: %.*s\n", token.type, token.text_length, token.text);
             }break;
 
       }
    }
+
    return(0);
 }
 
@@ -128,20 +132,21 @@ int main(void)
 char*
 read_entire_file_null_terminate(char* file_path_and_name) {
 
-   char* result = 0;
-   FILE* file = fopen(file_path_and_name, "r"); /* read the file */
-   if(file) {
+   char* result = NULL;
+   FILE* file = NULL;
+   file = fopen(file_path_and_name, "r"); /* read the file */
+   if (file) {
       fseek(file, 0, SEEK_END);
       size_t file_size = ftell(file);
       fseek(file, 0, SEEK_SET);
-
-      result = (char*)malloc(file_size + 1);
-      fread(result, file_size, 1, file);
-      /* null terminate the file */
-      result[file_size] = 0;
+      if (file_size > 0) {
+         result = (char*)malloc(file_size + 1);
+         fread(result, file_size, 1, file);
+         /* null terminate the file */
+         result[file_size] = 0;
+      }
       fclose(file);
    }
-
    return(result);
 }
 
@@ -188,20 +193,20 @@ eat_all_white_spaces(struct Tokeneizer* tokeneizer) {
          ++tokeneizer->at; /* advance the pointer */
       } else if ((tokeneizer->at[0] == '/') && (tokeneizer->at[1] == '/') ) {
          /* comment cpp style!!! */
-         tokeneizer->at += 2;
+         (tokeneizer->at) += 2;
          while (tokeneizer->at[0] && !(is_end_of_line(tokeneizer->at[0]))) {
             ++tokeneizer->at;
          }
       } else if ((tokeneizer->at[0] == '/') && (tokeneizer->at[1] == '/') ) {
          /* coment c style */
-         tokeneizer->at += 2;
+         (tokeneizer->at) += 2;
          while (tokeneizer->at[0] &&
                !(tokeneizer->at[0] != '*' && tokeneizer->at[1] != '/')
                ) {
             ++tokeneizer->at;
          }
          if (tokeneizer->at[0] == '*') {
-            tokeneizer->at += 2;
+            (tokeneizer->at) += 2;
          }
 
       } else {
@@ -242,6 +247,7 @@ get_Token(struct Tokeneizer* tokeneizer) {
    char c = tokeneizer->at[0];
    ++tokeneizer->at;
    switch(c) {
+      case '\0': {token.type = Token_end_of_string;} break;
       case '(': {token.type = Token_open_paren;} break;
       case ')': {token.type = Token_close_paren;} break;
       case ':': {token.type = Token_colon;} break;
@@ -284,10 +290,14 @@ get_Token(struct Tokeneizer* tokeneizer) {
             }
 
          token.text_length = tokeneizer->at - token.text;
-
+         }
+#if 0
          } else if (is_numeric(c)) {
             /* parse_number(); */
-         } else {
+
+         }
+#endif
+         else {
             token.type = Token_unknown;
          }
       } break;
