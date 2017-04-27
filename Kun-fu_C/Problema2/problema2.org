@@ -1,0 +1,6 @@
+* Problema 2
+Enunciado:
+Escribe una función que determina si una cadena de texto *no* tiene caracteres
+repetidos. Bonus: hazlo sin usar estructuras de datos (listas, diccionarios,
+etc) adicionales. Sí puedes usar cualquier función de la librería estándar.
+

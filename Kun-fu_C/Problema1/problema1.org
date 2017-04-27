@@ -1,0 +1,4 @@
+* Problema 1
+Enunciado:
+¿Cómo determinas si una cadena de texto es una permutación de otra cadena?
+

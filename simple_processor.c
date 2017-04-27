@@ -22,114 +22,108 @@ General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 ---------------------------------------------------------------------------*/
-#include "../inc/simple_processor.h"
-
-
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <inttypes.h>
+#include <stdbool.h>
 /*-------------------------------------------------------------------------
- *                       functions implementations
+ *                        NOTES
+ * 1. Lo que hace primero es definir un macro en el .h que queremos utilizar
+ * para ser parseado, algo como : #define instrospect(params)
+ * Lo importante es que tiene que ser al principio de todo del .h
+ * en nuestra estructura ponemos algo como: instrospect(category:"algo")
+ * 2. Etapa de parsing:
+ *    2.1 Primero lo que se hace es lexing: Se trata de analizar el codigo en
+ *    informacion que sea mas valiosa lo que lo llaman token(simbolo)
+ *    Por ello este es el primer paso, obtener estos tokens del archivo
+ -------------------------------------------------------------------------*/
+/*-------------------------------------------------------------------------
+ *                        datatypes
  -------------------------------------------------------------------------*/
 
-/**
- * @brief comparacion de strings para saber si llegamos a un token que nos
- * interesa, en este caso seria el nombre de match_name que estamos buscando
- *
- * @param tokeneizer
- * @param match_name
- *
- * @return true, false
- */
+enum token_type {
+   Token_unknown,
+   Token_identifier,
+   Token_open_paren,
+   Token_close_paren,
+   Token_colon,
+   Token_string,
+   Token_semi_colon,
+   Token_asterisk,
+   Token_open_bracket, /* llaves */
+   Token_close_bracket,
+   Token_open_brace,   /* corchetes */
+   Token_close_brace,
+   Token_end_of_string,
+   Token_number_of_tokens,
+};
+
+struct Token {
+   enum token_type type;
+   size_t text_length;
+   char* text;
+};
+
+struct Tokeneizer {
+   char* at;
+};
+
+/*-------------------------------------------------------------------------
+ *                        prototypes
+ -------------------------------------------------------------------------*/
+char*
+read_entire_file_null_terminate(char* file_path_and_name);
+
 bool
-tokens_equals(struct Token token, char* match_name) {
-   size_t i;
-   char* at = match_name;
-   for(i = 0; i < token.text_length; ++i, ++at) {
-      if ((*at == 0 ) || (token.text[i] != *at)) {
-         return(false);
-      }
-   }
-   bool result = (*at == 0);
+is_end_of_line(char c);
 
-   return(result);
-}
+bool
+is_white_space(char c);
 
 void
-parse_instrospection_params(struct Tokeneizer* tokeneizer) {
+eat_all_white_spaces(struct Tokeneizer* tokeneizer);
 
-   while(true) {
-      struct Token token = get_Token(tokeneizer);
-      if ((token.type == Token_close_paren) || (token.type == Token_end_of_string)) {
-         break;
-      }
-   }
-}
+bool
+is_alpha(char c);
 
-void
-parse_member_Token(struct Tokeneizer* tokeneizer, struct Token member_type_Token) {
+struct Token
+get_Token(struct Tokeneizer* tokeneizer);
 
-   bool parse = true;
-   bool is_pointer = false;
+int main(void)
+{
+   char* file_content = read_entire_file_null_terminate("/home/elsuizo/lists.txt");
+   struct Tokeneizer tokeneizer = {};
+   /* like a iterator??? */
+   tokeneizer.at = file_content;
 
-   while(parse) {
-      struct Token token_name = get_Token(tokeneizer);
-      switch(token_name.type)
-      {
-         case Token_asterisk:
+   bool parsing = true;
+   while(parsing) {
+      struct Token token = get_Token(&tokeneizer);
+
+      switch(token.type) {
+         case Token_unknown:
             {
-               is_pointer = true;
-            } break;
-         case Token_identifier:
-            {
-               printf("DEBUG_VALUE(%.*s);\n", token_name.text_length, token_name.text);
-            } break;
-         case Token_semi_colon:
+
+            }break;
          case Token_end_of_string:
             {
-               parse = false;
-            } break;
+               parsing = false;
+            }break;
+         default:
+            {
+               /* .*s cpp crazy town */
+               /* printf("%d: %s", token.type, token.text_length, token.text); */
+            }break;
 
       }
    }
+   return(0);
 }
 
-void
-parse_struct(struct Tokeneizer* tokeneizer) {
-
-   if (require_Token(tokeneizer, Token_open_brace)) {
-      printf("comienzo!!!");
-      while (true) {
-         struct Token member_Token = get_Token(tokeneizer);
-         if (member_Token.type == Token_close_brace) {
-            break;
-         } else {
-            parse_member_Token(tokeneizer, member_Token);
-         }
-      }
-   } else {
-      printf("No ha entrado!!!");
-   }
-
-}
-
-void
-parse_instrospectable(struct Tokeneizer* tokeneizer) {
-
-   if (require_Token(tokeneizer, Token_open_paren)) {
-      parse_instrospection_params(tokeneizer);
-
-      printf("token antes:%s", tokeneizer->at);
-      struct Token token = get_Token(tokeneizer);
-      printf("token despues:%s", token.text);
-
-      if (tokens_equals(token, "struct")) {
-         parse_struct(tokeneizer);
-      } else {
-         fprintf(stderr, "ERROR: instrospection is only soported for struct :(\n");
-      }
-   } else {
-      fprintf(stderr, "ERROR: missing parentheses!!!\n");
-   }
-}
-
+/*-------------------------------------------------------------------------
+ *                        static functions
+ -------------------------------------------------------------------------*/
 char*
 read_entire_file_null_terminate(char* file_path_and_name) {
 
@@ -247,7 +241,6 @@ get_Token(struct Tokeneizer* tokeneizer) {
    char c = tokeneizer->at[0];
    ++tokeneizer->at;
    switch(c) {
-      case '\0': {token.type = Token_end_of_string;} break; /* the most important!!! */
       case '(': {token.type = Token_open_paren;} break;
       case ')': {token.type = Token_close_paren;} break;
       case ':': {token.type = Token_colon;} break;
@@ -301,11 +294,3 @@ get_Token(struct Tokeneizer* tokeneizer) {
    return(token);
 }
 
-bool
-require_Token(struct Tokeneizer* tokeneizer, enum token_type desire_type) {
-
-   struct Token token = get_Token(tokeneizer);
-   bool result = (token.type == desire_type);
-
-   return(result);
-}
