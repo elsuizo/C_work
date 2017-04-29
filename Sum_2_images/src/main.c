@@ -52,63 +52,112 @@ de nuestra representacion de imagen.
 #include <stdio.h>
 #include <stdlib.h>
 
-static unsigned char* read_image(char* path, int* w, int* h) {
-   unsigned char* image_output;
-   image_output = stbi_load(path, w, h, 0, 3);
+typedef unsigned char uchar;
+
+struct Image {
+   int width;
+   int height;
+   uchar* data;
+};
+
+static struct Image read_Image(char* path_to_image) {
+   struct Image image_output = {};
+   image_output.data = stbi_load(path_to_image, &image_output.width, &image_output.height, 0, 3);
    return image_output;
 }
 
-static unsigned char* read_image_gray(char* path, int* w, int* h) {
-   unsigned char* image_output;
-   image_output = stbi_load(path, w, h, 0, 1);
+static struct Image read_Image_gray(char* path) {
+   struct Image image_output = {};
+   image_output.data = stbi_load(path, &image_output.width, &image_output.height, 0, 1);
    return image_output;
 }
 
-static void write_image(char* path, unsigned char* image, int w, int h) {
+static void write_Image(char* path, struct Image* image) {
 
-   stbi_write_png(path, w, h, 3, image, 0);
+   stbi_write_png(path, image->width, image->height, 3, image->data, 0);
 }
 
-/* TODO(elsuizo:2017-04-20):como hago para verificar que me ingresaron bine la image??? */
-static void write_image_gray(char* path, unsigned char* image, int w, int h) {
+static void write_Image_gray(char* path, struct Image* image_gray) {
 
-   stbi_write_png(path, w, h, 1, image, 0);
+   stbi_write_png(path, image_gray->width, image_gray->height, 1, image_gray->data, 0);
 }
 /*-------------------------------------------------------------------------
  *                        main
  -------------------------------------------------------------------------*/
 int main(void)
 {
-   int width, height, h, w;
-   unsigned char red, green, blue;
-   unsigned char* image;
-   unsigned char* image_gray;
-   /* unsigned char* image = stbi_load("/home/elsuizo/Images/beagle1.png", */
-                                                /* &width, &height, 0, 3); */
-   image = read_image("/home/elsuizo/Images/beagle1.png", &width, &height);
-   image_gray = read_image_gray("/home/elsuizo/Images/beagle1.png", &w, &h);
+   struct Image img1 = {};
+   struct Image img2 = {};
+   struct Image img_sum_gray = {};
+   struct Image img_sum = {};
+   struct Image img1_gray = {};
+   struct Image img2_gray= {};
 
+   img1_gray = read_Image_gray("/home/elsuizo/Dropbox/Freelance/Imges_merge/back.png");
+   img2_gray = read_Image_gray("/home/elsuizo/Dropbox/Freelance/Imges_merge/overlay.png");
 
-   for (int i = 0; i < height; ++i) {
-      for (int j = 0; j < width; ++j) {
-         red    =  image[3 * (i * width + j) + 0];
-         green  =  image[3 * (i * width + j) + 1];
-         blue   =  image[3 * (i * width + j) + 2];
-         if(red == 255) {
-            image[3 * (i * width + j) + 0] = 0;
+   img1 = read_Image("/home/elsuizo/Dropbox/Freelance/Imges_merge/back.png");
+   img2 = read_Image("/home/elsuizo/Dropbox/Freelance/Imges_merge/overlay.png");
+
+   /*-------------------------------------------------------------------------
+    *                        color
+    -------------------------------------------------------------------------*/
+   uchar* data = (uchar*)malloc(sizeof(uchar) * img1.width * img1.height * 3);
+   img_sum.data = data;
+   img_sum.width = img1.width;
+   img_sum.height = img1.height;
+
+   /*-------------------------------------------------------------------------
+    *                        gray
+    -------------------------------------------------------------------------*/
+   uchar* data_gray = (uchar*)malloc(sizeof(uchar) * img1_gray.width * img1_gray.height);
+   img_sum_gray.data = data_gray;
+   img_sum_gray.width = img1_gray.width;
+   img_sum_gray.height = img1_gray.height;
+
+   /* check if data exist */
+   if ((img2.data == 0) && (img1.data == 0)) {
+      printf("error!!!");
+      exit(1);
+   }
+   /* check if data exist */
+   if ((img2_gray.data == 0) && (img1_gray.data == 0)) {
+      printf("error!!!");
+      exit(1);
+   }
+
+   /*-------------------------------------------------------------------------
+    *                        sum images gray
+    -------------------------------------------------------------------------*/
+   for (int i = 0; i < img1_gray.height; ++i) {
+      for (int j = 0; j < img1_gray.width; ++j) {
+         img_sum_gray.data[(i * img1_gray.width + j)] = img1_gray.data[(i * img1_gray.width + j)]
+                                                      + img2_gray.data[(i * img1_gray.width + j)];
          }
-         /* printf("green: %u\n", green); */
+      }
+
+   /*-------------------------------------------------------------------------
+    *                        sum images
+    -------------------------------------------------------------------------*/
+   for (int i = 0; i < img1.height; ++i) {
+      for (int j = 0; j < img1.width; ++j) {
+         img_sum.data[3 * (i * img1.width + j) + 0] = img1.data[3 * (i * img1.width + j) + 0] + img2.data[3 * (i * img1.width + j) + 0];
+         img_sum.data[3 * (i * img1.width + j) + 1] = img1.data[3 * (i * img1.width + j) + 1] + img2.data[3 * (i * img1.width + j) + 1];
+         img_sum.data[3 * (i * img1.width + j) + 2] = img1.data[3 * (i * img1.width + j) + 2] + img2.data[3 * (i * img1.width + j) + 2];
       }
    }
 
-   /* stbi_write_png("piola.png", width, height, 3, image, 0); */
-   /* stbi_write_png("piola_gray.png", w, h, 1, image_gray, 0); */
-   write_image("piola2.png", image, w, h);
-   write_image_gray("piola2_gray.png", image_gray, w, h);
-   printf("height: %d\n", height);
-   printf("width: %d\n", width);
-   stbi_image_free(image);
+   /* save the results */
+   write_Image_gray("piola_gray.png", &img_sum_gray);
+   write_Image("piola.png", &img_sum);
+   /* free!!! */
+   stbi_image_free(img1_gray.data);
+   stbi_image_free(img2_gray.data);
+   stbi_image_free(img1.data);
+   stbi_image_free(img2.data);
+   stbi_image_free(img_sum_gray.data);
+   stbi_image_free(img_sum.data);
+
+
    return 0;
 }
-
-
