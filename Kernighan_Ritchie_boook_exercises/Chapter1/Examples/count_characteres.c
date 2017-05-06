@@ -1,14 +1,15 @@
 /* -------------------------------------------------------------------------
-@file 1-8.c
+@file count_characteres.c
 
-@date 04/19/17 21:53:53
+@date 04/29/17 10:37:45
 @author Martin Noblia
 @email martin.noblia@openmailbox.org
 
 @brief
- Write a program to count blancks, tabs, and newlines
+Count characters in a text stream
 @detail
-
+NOTE: for count the characters of a text file do:
+less text.txt | ./count_characters
 Licence:
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -23,31 +24,17 @@ General Public License for more details.
 You should have received a copy of the GNU General Public License
 ---------------------------------------------------------------------------*/
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void)
 {
-   int c;
-   long number_of_blanks = 0;
-   long number_of_tabs = 0;
-   long number_of_new_lines = 0;
-   while((c = getchar()) != EOF) {
-      switch(c)
-      {
-         case ' ':
-            {
-               ++number_of_blanks;
-            }break;
-         case '\t':
-            {
-               ++number_of_tabs;
-            }break;
-         case '\n':
-            {
-               ++number_of_new_lines;
-            }break;
-
-      }
+   long number_of_chars = 0;
+   while (getchar() != EOF) {
+      ++number_of_chars;
    }
-   printf("numero de blancos: %ld, numero de tabs: %ld, numero de new lines: %ld\n" ,number_of_blanks, number_of_tabs, number_of_new_lines);
+   printf("The number of characters in the text stream is: %ld", number_of_chars);
    return 0;
 }
+
+
+

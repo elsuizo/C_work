@@ -22,6 +22,8 @@ General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 ---------------------------------------------------------------------------*/
+#define instrospect(params)
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -42,7 +44,6 @@ You should have received a copy of the GNU General Public License
 /*-------------------------------------------------------------------------
  *                        datatypes
  -------------------------------------------------------------------------*/
-#define instrospect(params)
 
 enum token_type {
    Token_unknown,
@@ -61,7 +62,7 @@ enum token_type {
    Token_number_of_tokens,
 };
 
-instrospect() struct Token {
+instrospect(category:"piola") struct Token {
    enum token_type type;
    size_t text_length;
    char* text;

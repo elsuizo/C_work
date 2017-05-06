@@ -25,19 +25,20 @@ You should have received a copy of the GNU General Public License
 ---------------------------------------------------------------------------*/
 #include <stdio.h>
 
-#define IN 1
-#define OUT 0
 int main(void)
 {
-   int input;
-   int number_characters
-   int number_blanck = 0;
-   int state = OUT;
-   while((c = getchar()) != EOF) {
-      ++number_characters;
+   int in_space = 0;
+   char c;
+
+   while ((c = getchar()) != EOF) {
       if (c == ' ') {
-         ++number_blanks;
+         if (!in_space) {
+            in_space = 1;
+            putchar(c);
+         }
+      } else {
+         in_space = 0;
+         putchar(c);
       }
    }
-   return 0;
 }

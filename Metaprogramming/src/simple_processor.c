@@ -200,8 +200,8 @@ eat_all_white_spaces(struct Tokeneizer* tokeneizer) {
       } else if ((tokeneizer->at[0] == '/') && (tokeneizer->at[1] == '/') ) {
          /* coment c style */
          tokeneizer->at += 2;
-         while (tokeneizer->at[0] &&
-               !(tokeneizer->at[0] != '*' && tokeneizer->at[1] != '/')
+         while ((tokeneizer->at[0]) &&
+               !(tokeneizer->at[0] != '*' && (tokeneizer->at[1] != '/'))
                ) {
             ++tokeneizer->at;
          }

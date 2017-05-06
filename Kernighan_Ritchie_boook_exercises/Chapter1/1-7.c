@@ -1,12 +1,12 @@
 /* -------------------------------------------------------------------------
-@file 1-8.c
+@file 1-7.c
 
-@date 04/19/17 21:53:53
+@date 04/29/17 10:26:50
 @author Martin Noblia
 @email martin.noblia@openmailbox.org
 
 @brief
- Write a program to count blancks, tabs, and newlines
+Write a program to print the value of EOF
 @detail
 
 Licence:
@@ -23,31 +23,13 @@ General Public License for more details.
 You should have received a copy of the GNU General Public License
 ---------------------------------------------------------------------------*/
 #include <stdio.h>
+#include <stdlib.h>
 
 int main(void)
 {
-   int c;
-   long number_of_blanks = 0;
-   long number_of_tabs = 0;
-   long number_of_new_lines = 0;
-   while((c = getchar()) != EOF) {
-      switch(c)
-      {
-         case ' ':
-            {
-               ++number_of_blanks;
-            }break;
-         case '\t':
-            {
-               ++number_of_tabs;
-            }break;
-         case '\n':
-            {
-               ++number_of_new_lines;
-            }break;
-
-      }
-   }
-   printf("numero de blancos: %ld, numero de tabs: %ld, numero de new lines: %ld\n" ,number_of_blanks, number_of_tabs, number_of_new_lines);
+   printf("The value of the macro EOF is: %d\n", EOF);
    return 0;
 }
+
+
+

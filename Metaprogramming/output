@@ -1,13 +1,3 @@
-token antes:struct SingleLinked {
-   struct Node* head;
-   struct Node* tail;
-   struct Node* current;
-   uint8_t size;
-};
-token despues:struct SingleLinked {
-   struct Node* head;
-   struct Node* tail;
-   struct Node* current;
-   uint8_t size;
-};
-No ha entrado!!!
+ERROR: instrospection is only soported for struct :(
+ERROR: instrospection is only soported for struct :(
+ERROR: instrospection is only soported for struct :(

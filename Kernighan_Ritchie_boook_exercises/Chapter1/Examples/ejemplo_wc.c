@@ -1,12 +1,12 @@
 /* -------------------------------------------------------------------------
-@file 1-8.c
+@file ejemplo_wc.c
 
-@date 04/19/17 21:53:53
+@date 04/19/17 21:57:05
 @author Martin Noblia
 @email martin.noblia@openmailbox.org
 
 @brief
- Write a program to count blancks, tabs, and newlines
+Word count example: pag 20
 @detail
 
 Licence:
@@ -22,32 +22,31 @@ General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 ---------------------------------------------------------------------------*/
+/* NOTE(elsuizo:2017-04-19):para ingresar en EOF en linux Ctrl-d!!! */
 #include <stdio.h>
 
+#define IN  1 /* inside a word */
+#define OUT 0 /* outiside a word */
+/* count lines, words, and characters in input */
 int main(void)
 {
-   int c;
-   long number_of_blanks = 0;
-   long number_of_tabs = 0;
-   long number_of_new_lines = 0;
+   int c, nl, nw, nc, state;
+   state = OUT;
+   nl = nw = nc = 0;
    while((c = getchar()) != EOF) {
-      switch(c)
-      {
-         case ' ':
-            {
-               ++number_of_blanks;
-            }break;
-         case '\t':
-            {
-               ++number_of_tabs;
-            }break;
-         case '\n':
-            {
-               ++number_of_new_lines;
-            }break;
-
+      ++nc;
+      if (c == '\n') {
+         ++nl;
+      }
+      if (c == ' ' || c == '\n' || c == '\t') {
+         state = OUT;
+      } else if (state == OUT) {
+         state = IN;
+         ++nw;
       }
    }
-   printf("numero de blancos: %ld, numero de tabs: %ld, numero de new lines: %ld\n" ,number_of_blanks, number_of_tabs, number_of_new_lines);
+   printf("%d %d %d \n", nl, nw, nc);
    return 0;
 }
+
+

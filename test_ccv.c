@@ -1,12 +1,12 @@
 /* -------------------------------------------------------------------------
-@file 1-8.c
+@file test_ccv.c
 
-@date 04/19/17 21:53:53
+@date 04/27/17 22:52:45
 @author Martin Noblia
 @email martin.noblia@openmailbox.org
 
 @brief
- Write a program to count blancks, tabs, and newlines
+
 @detail
 
 Licence:
@@ -22,32 +22,14 @@ General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 ---------------------------------------------------------------------------*/
-#include <stdio.h>
+#include <ccv.h>
 
-int main(void)
+int main(int args, char** argv)
 {
-   int c;
-   long number_of_blanks = 0;
-   long number_of_tabs = 0;
-   long number_of_new_lines = 0;
-   while((c = getchar()) != EOF) {
-      switch(c)
-      {
-         case ' ':
-            {
-               ++number_of_blanks;
-            }break;
-         case '\t':
-            {
-               ++number_of_tabs;
-            }break;
-         case '\n':
-            {
-               ++number_of_new_lines;
-            }break;
+   ccv_dense_matrix_t* image = 0;
+   ccv_read(argv[1], &image, CCV_IO_GRAY, CCV_IO_ANY_FILE);
+   ccv_write(image, argv[2], 0, CCV_IO_PNG_FILE, 0);
 
-      }
-   }
-   printf("numero de blancos: %ld, numero de tabs: %ld, numero de new lines: %ld\n" ,number_of_blanks, number_of_tabs, number_of_new_lines);
    return 0;
 }
+

@@ -29,7 +29,9 @@ You should have received a copy of the GNU General Public License
  -------------------------------------------------------------------------*/
 int main(void)
 {
-   char* file_name = "/home/elsuizo/lists.h";
+   /* char* file_name = "/home/elsuizo/lists.h"; */
+   char* file_name = "/home/elsuizo/C_work/Metaprogramming/inc/simple_processor.h";
+
    char* file_content = read_entire_file_null_terminate(file_name);
    if (file_content == 0) {
       printf("could not open: %s\n", file_name);
@@ -50,12 +52,14 @@ int main(void)
             }break;
          case Token_identifier:
             {
+               /* printf("identifier!!!\n"); */
                if (tokens_equals(token, "instrospect")) {
                   parse_instrospectable(&tokeneizer);
                }
             }break;
          case Token_unknown:
             {
+               /* printf("Unknown token!!!\n"); */
             }break;
          default:
             {

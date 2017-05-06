@@ -1,12 +1,14 @@
 /* -------------------------------------------------------------------------
-@file ejemplo_wc.c
+@file 1-6.c
 
-@date 04/19/17 21:57:05
+@date 04/29/17 10:16:09
 @author Martin Noblia
 @email martin.noblia@openmailbox.org
 
 @brief
-Word count example: pag 20
+
+Verify that the expression `getchar() != EOF is 0 or 1`
+
 @detail
 
 Licence:
@@ -22,30 +24,26 @@ General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 ---------------------------------------------------------------------------*/
-/* NOTE(elsuizo:2017-04-19):para ingresar en EOF en linuz Ctrl-d!!! */
 #include <stdio.h>
+#include <stdlib.h>
 
-#define IN  1 /* inside a word */
-#define OUT 0 /* outiside a word */
-/* count lines, words, and characters in input */
 int main(void)
 {
-   int c, nl, nw, nc, state;
-   state = OUT;
-   nl = nw = nc = 0;
-   while((c = getchar()) != EOF) {
-      ++nc;
-      if (c == '\n') {
-         ++nl;
-      }
-      if (c == ' ' || c == '\n' || c == '\t') {
-         state = OUT;
-      } else if (state == OUT) {
-         state = IN;
-         ++nw;
-      }
+   int result = (getchar() != EOF);
+   switch(result) {
+      case 0:
+         {
+            printf("es 0!!!");
+         }break;
+      case 1:
+         {
+            printf("es 1!!!");
+         }break;
+      default:
+         {
+            printf("no es ninguno de los dos!!!");
+         }
    }
-   printf("%d %d %d \n", nl, nw, nc);
    return 0;
 }
 
