@@ -1,0 +1,41 @@
+src/simple_compressor_RLE.c:51:29: warning: incompatible pointer to integer conversion passing 'uchar *' (aka 'unsigned char *') to parameter of type 'size_t' (aka 'unsigned long') [-Wint-conversion]
+      fread(result.content, result.content, 1, file);
+                            ^~~~~~~~~~~~~~
+/usr/include/stdio.h:711:53: note: passing argument to parameter '__size' here
+extern size_t fread (void *__restrict __ptr, size_t __size,
+                                                    ^
+src/simple_compressor_RLE.c:61:11: warning: unused variable 'out_size' [-Wunused-variable]
+   size_t out_size = 256 + 2 * in_size;
+          ^
+src/simple_compressor_RLE.c:62:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+src/simple_compressor_RLE.c:67:8: warning: type specifier missing, defaults to 'int' [-Wimplicit-int]
+static copy_buffer(size_t size, uchar* source, uchar* dest) {
+~~~~~~ ^
+src/simple_compressor_RLE.c:72:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+src/simple_compressor_RLE.c:77:1: warning: control reaches end of non-void function [-Wreturn-type]
+}
+^
+src/simple_compressor_RLE.c:116:90: error: use of undeclared identifier 'out_buffer'; did you mean 'copy_buffer'?
+            decompress(file_content.size - 4, file_content.content + 4, out_buffer_size, out_buffer);
+                                                                                         ^~~~~~~~~~
+                                                                                         copy_buffer
+src/simple_compressor_RLE.c:67:8: note: 'copy_buffer' declared here
+static copy_buffer(size_t size, uchar* source, uchar* dest) {
+       ^
+src/simple_compressor_RLE.c:118:35: error: use of undeclared identifier 'out_buffer'; did you mean 'copy_buffer'?
+            final_output_buffer = out_buffer;
+                                  ^~~~~~~~~~
+                                  copy_buffer
+src/simple_compressor_RLE.c:67:8: note: 'copy_buffer' declared here
+static copy_buffer(size_t size, uchar* source, uchar* dest) {
+       ^
+src/simple_compressor_RLE.c:118:33: warning: incompatible pointer types assigning to 'uchar *' (aka 'unsigned char *') from 'int (size_t, uchar *, uchar *)' (aka 'int (unsigned long, unsigned char *, unsigned char *)') [-Wincompatible-pointer-types]
+            final_output_buffer = out_buffer;
+                                ^ ~~~~~~~~~~
+7 warnings and 2 errors generated.
+Makefile:39: recipe for target 'obj/simple_compressor_RLE.o' failed
+make: *** [obj/simple_compressor_RLE.o] Error 1
