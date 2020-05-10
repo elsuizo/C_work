@@ -31,7 +31,7 @@ You should have received a copy of the GNU General Public License
 int main(void) {
    int fd;
    /* open the file */
-   fd = open("/dev/ttyACM0", O_RDWR | O_NOCTTY);
+   fd = open("/dev/ttyUSB0", O_RDWR | O_NOCTTY);
    char* message = (fd < 0) ? "Error opening the port!!!\n": "ttyACMO opened succesfully\n";
    printf("%s", message);
    /* close the file */

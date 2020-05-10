@@ -32,7 +32,7 @@ int main(void) {
    FILE* camera;
    FILE* grab;
    camera = fopen("/dev/video0", "rb");
-   grab = fopen("grab.jpg", "wb");
+   grab = fopen("grab.png", "wb");
    unsigned char data[SIZE];
    fread(data, sizeof(data[0]), SIZE, camera);
    fwrite(data, sizeof(data[0]), SIZE, grab);
@@ -40,5 +40,3 @@ int main(void) {
    fclose(grab);
    return 0;
 }
-
-
